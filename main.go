@@ -9,6 +9,7 @@ import (
 func main() {
 	if len(os.Args) == 1 {
 		fmt.Println("Usage: po2json [file]")
+		os.Exit(0)
 	}
 
 	filename := os.Args[1]
