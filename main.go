@@ -15,6 +15,11 @@ func main() {
 		os.Exit(1)
 	}
 
-	err := ParsePOFile(filename)
+	dict, err := ParsePOFile(filename)
+	if err != nil {
+		fmt.Println(err)
+		os.Exit(1)
+	}
 	_ = err
+	_ = dict
 }
