@@ -1,7 +1,6 @@
 package main
 
 import (
-	"encoding/json"
 	"fmt"
 	"os"
 )
@@ -25,13 +24,7 @@ func main() {
 		os.Exit(1)
 	}
 
-	jsonBytes, err := json.MarshalIndent(dict, "", "  ")
-	if err != nil {
-		fmt.Println("JSON Encode Error: ", err)
-		os.Exit(1)
-	}
-
-	fmt.Println(string(jsonBytes))
+	fmt.Println(dict)
 
 	_ = err
 	_ = dict

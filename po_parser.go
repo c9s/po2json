@@ -1,6 +1,7 @@
 package main
 
 import (
+	"encoding/json"
 	"io/ioutil"
 	"regexp"
 	"strings"
@@ -20,6 +21,14 @@ func (self Dictionary) AddMessage(msgId string, msgStr string) {
 
 func (self Dictionary) RemoveMessage(msgId string) {
 	delete(self, msgId)
+}
+
+func (self Dictionary) String() string {
+	jsonBytes, err := json.MarshalIndent(self, "", "  ")
+	if err != nil {
+		panic(err)
+	}
+	return string(jsonBytes)
 }
 
 func ParsePOFile(filename string) (*Dictionary, error) {
