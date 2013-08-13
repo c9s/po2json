@@ -1,7 +1,10 @@
 package main
 
-import "os"
-import "fmt"
+import (
+	"encoding/json"
+	"fmt"
+	"os"
+)
 
 func main() {
 	if len(os.Args) == 1 {
@@ -17,9 +20,18 @@ func main() {
 
 	dict, err := ParsePOFile(filename)
 	if err != nil {
-		fmt.Println(err)
+		fmt.Println("PO File Parsing Error", err)
 		os.Exit(1)
 	}
+
+	jsonBytes, err := json.MarshalIndent(dict, "", "  ")
+	if err != nil {
+		fmt.Println("JSON Encode Error: ", err)
+		os.Exit(1)
+	}
+
+	fmt.Println(string(jsonBytes))
+
 	_ = err
 	_ = dict
 }

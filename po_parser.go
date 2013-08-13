@@ -1,7 +1,6 @@
 package main
 
 import (
-	"fmt"
 	"io/ioutil"
 	"regexp"
 	"strings"
@@ -56,8 +55,6 @@ func ParsePOFile(filename string) (*Dictionary, error) {
 			continue
 		}
 
-		fmt.Println(line)
-
 		if strings.HasPrefix(line, "msgid") || msgIdRegExp.MatchString(line) {
 			if len(lastMsgId) > 0 && len(lastMsgStr) > 0 {
 				// push to the dictionary
@@ -82,15 +79,7 @@ func ParsePOFile(filename string) (*Dictionary, error) {
 				lastMsgStr = append(lastMsgStr, str)
 			}
 		}
-
 	}
 
-	fmt.Println(dictionary)
-
-	_ = state
-	_ = lines
-	_ = lastMsgId
-	_ = lastMsgStr
-	_ = dictionary
 	return &dictionary, nil
 }
