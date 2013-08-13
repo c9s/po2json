@@ -46,9 +46,6 @@ func ParsePOFile(filename string) (*Dictionary, error) {
 	stringRegExp := regexp.MustCompile("\"(.*)\"")
 
 	for _, line := range lines {
-		if len(line) == 0 {
-			continue
-		}
 		if len(line) == 0 || line[0] == '#' ||
 			commentRegExp.MatchString(line) ||
 			emptyLineRegExp.MatchString(line) {
