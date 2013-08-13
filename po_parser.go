@@ -58,7 +58,7 @@ func ParsePOFile(filename string) (*Dictionary, error) {
 		if strings.HasPrefix(line, "msgid") || msgIdRegExp.MatchString(line) {
 			if len(lastMsgId) > 0 && len(lastMsgStr) > 0 {
 				// push to the dictionary
-				dictionary.AddMessage(strings.Join(lastMsgId, "\n"), strings.Join(lastMsgStr, "\n"))
+				dictionary.AddMessage(strings.Join(lastMsgId, ""), strings.Join(lastMsgStr, ""))
 				lastMsgId = []string{}
 				lastMsgStr = []string{}
 			}
