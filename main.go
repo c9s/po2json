@@ -52,9 +52,6 @@ func main() {
 
 			var jsonFile = path.Join(jsonDir, lang) + ".json"
 			if FileExists(poFile) {
-
-				fmt.Println("Found", poFile)
-
 				dict, err := po.ParseFile(poFile)
 				if err != nil {
 					fmt.Println("PO File Parsing Error", err)
