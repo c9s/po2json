@@ -26,6 +26,7 @@ func main() {
 	if len(os.Args) == 1 {
 		fmt.Println("Usage: ")
 		fmt.Println("   po2json [file] > app.json")
+		fmt.Println("   po2json --domain app")
 		fmt.Println("   po2json --domain app --locale path/to/locale_dir --json-dir public/locale")
 		os.Exit(0)
 	}
@@ -67,8 +68,6 @@ func main() {
 				}
 			}
 		}
-
-		_ = err
 	} else {
 		filename := os.Args[1]
 		if _, err := os.Stat(filename); err != nil {
