@@ -37,7 +37,12 @@ func main() {
 		var localeDir = *localeOpt
 		var jsonDir = *jsonDirOpt
 		var langs = []string{}
-		fileInfos, err := ioutil.ReadDir(*localeOpt)
+		fileInfos, err := ioutil.ReadDir(localeDir)
+
+		if err != nil {
+			fmt.Println("Can not read:", localeDir)
+			os.Exit(1)
+		}
 
 		// get languages
 		for _, fi := range fileInfos {
@@ -53,19 +58,22 @@ func main() {
 
 			var jsonFile = path.Join(jsonDir, lang) + ".json"
 			if FileExists(poFile) {
-				dict, err := po.ParseFile(poFile)
-				if err != nil {
-					fmt.Println("PO File Parsing Error", err)
-					os.Exit(1)
-				}
 
-				fmt.Println("Writing json file", jsonFile)
-				jsonOutput := dict.String()
-				err = ioutil.WriteFile(jsonFile, []byte(jsonOutput), 0666)
-				if err != nil {
-					fmt.Println("Can not write json file", jsonFile)
-					os.Exit(1)
-				}
+				go func(poFile string, jsonFile string) {
+					dict, err := po.ParseFile(poFile)
+					if err != nil {
+						fmt.Println("PO File Parsing Error", err)
+						os.Exit(1)
+					}
+
+					fmt.Println("Writing json file", jsonFile)
+					jsonOutput := dict.String()
+					err = ioutil.WriteFile(jsonFile, []byte(jsonOutput), 0666)
+					if err != nil {
+						fmt.Println("Can not write json file", jsonFile)
+						os.Exit(1)
+					}
+				}(poFile, jsonFile)
 			}
 		}
 	} else {
