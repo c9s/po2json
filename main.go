@@ -2,8 +2,8 @@ package main
 
 import (
 	"fmt"
+	"github.com/c9s/po2json/pofile"
 	"os"
-	"po2json/pofile"
 )
 
 func main() {
