@@ -20,6 +20,24 @@ func FileExists(filename string) bool {
 	return true
 }
 
+func ConvertPoToJson(poFile, jsonFile string, c chan bool) bool {
+	dict, err := po.ParseFile(poFile)
+	if err != nil {
+		fmt.Println("PO File Parsing Error", err)
+		os.Exit(1)
+	}
+
+	fmt.Println("Writing JSON", jsonFile)
+	jsonOutput := dict.String()
+	err = ioutil.WriteFile(jsonFile, []byte(jsonOutput), 0666)
+	if err != nil {
+		fmt.Println("Can not write json file", jsonFile)
+		os.Exit(1)
+	}
+	c <- true
+	return true
+}
+
 func main() {
 	flag.Parse()
 
@@ -62,22 +80,7 @@ func main() {
 
 			if FileExists(poFile) {
 				fmt.Println("Start Processing", poFile)
-				go func(poFile string, jsonFile string) {
-					dict, err := po.ParseFile(poFile)
-					if err != nil {
-						fmt.Println("PO File Parsing Error", err)
-						os.Exit(1)
-					}
-
-					fmt.Println("Writing JSON", jsonFile)
-					jsonOutput := dict.String()
-					err = ioutil.WriteFile(jsonFile, []byte(jsonOutput), 0666)
-					if err != nil {
-						fmt.Println("Can not write json file", jsonFile)
-						os.Exit(1)
-					}
-					c <- true
-				}(poFile, jsonFile)
+				go ConvertPoToJson(poFile, jsonFile, c)
 			}
 		}
 		for routineCounter > 0 {
