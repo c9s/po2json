@@ -15,9 +15,9 @@ var jsonDirOpt = flag.String("json-dir", "public/locale", "json output directory
 
 func FileExists(filename string) bool {
 	if _, err := os.Stat(filename); err != nil {
-		return true
+		return false
 	}
-	return false
+	return true
 }
 
 func main() {
@@ -34,20 +34,41 @@ func main() {
 	if *domainOpt != "" {
 		var domain = *domainOpt
 		var localeDir = *localeOpt
+		var jsonDir = *jsonDirOpt
 		var langs = []string{}
 		fileInfos, err := ioutil.ReadDir(*localeOpt)
 
 		// get languages
 		for _, fi := range fileInfos {
 			if fi.IsDir() {
-				fmt.Println(fi.Name())
 				langs = append(langs, fi.Name())
 			}
 		}
 
+		os.MkdirAll(jsonDir, 0777)
+
 		for _, lang := range langs {
 			var poFile = path.Join(localeDir, lang, "LC_MESSAGES", domain) + ".po"
-			_ = poFile
+
+			var jsonFile = path.Join(jsonDir, lang) + ".json"
+			if FileExists(poFile) {
+
+				fmt.Println("Found", poFile)
+
+				dict, err := po.ParseFile(poFile)
+				if err != nil {
+					fmt.Println("PO File Parsing Error", err)
+					os.Exit(1)
+				}
+
+				fmt.Println("Writing json file ", jsonFile)
+				jsonOutput := dict.String()
+				err = ioutil.WriteFile(jsonFile, []byte(jsonOutput), 0666)
+				if err != nil {
+					fmt.Println("Can not write json file", jsonFile)
+					os.Exit(1)
+				}
+			}
 		}
 
 		_ = err
