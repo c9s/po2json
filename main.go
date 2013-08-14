@@ -58,7 +58,7 @@ func main() {
 					os.Exit(1)
 				}
 
-				fmt.Println("Writing json file ", jsonFile)
+				fmt.Println("Writing json file", jsonFile)
 				jsonOutput := dict.String()
 				err = ioutil.WriteFile(jsonFile, []byte(jsonOutput), 0666)
 				if err != nil {
