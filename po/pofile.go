@@ -1,4 +1,4 @@
-package pofile
+package po
 
 import (
 	"encoding/json"

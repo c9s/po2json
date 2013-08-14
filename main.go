@@ -2,7 +2,7 @@ package main
 
 import (
 	"fmt"
-	"github.com/c9s/po2json/pofile"
+	"github.com/c9s/po2json/po"
 	"os"
 )
 
@@ -19,7 +19,7 @@ func main() {
 		os.Exit(1)
 	}
 
-	dict, err := pofile.ParseFile(filename)
+	dict, err := po.ParseFile(filename)
 	if err != nil {
 		fmt.Println("PO File Parsing Error", err)
 		os.Exit(1)
