@@ -1,4 +1,4 @@
-package main
+package pofile
 
 import (
 	"encoding/json"
@@ -31,15 +31,14 @@ func (self Dictionary) String() string {
 	return string(jsonBytes)
 }
 
-func ParsePOFile(filename string) (*Dictionary, error) {
+func ParseFile(filename string) (*Dictionary, error) {
 
 	// process(filename)
 	bytes, err := ioutil.ReadFile(filename)
 	if err != nil {
 		return nil, err
 	}
-	content := string(bytes)
-	lines := strings.Split(content, "\n")
+	lines := strings.Split(string(bytes), "\n")
 
 	lastMsgId := []string{}
 	lastMsgStr := []string{}
