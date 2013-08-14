@@ -53,12 +53,15 @@ func main() {
 
 		os.MkdirAll(jsonDir, 0777)
 
+		var c = make(chan bool)
+		var routineCounter = len(langs)
+
 		for _, lang := range langs {
 			var poFile = path.Join(localeDir, lang, "LC_MESSAGES", domain) + ".po"
-
 			var jsonFile = path.Join(jsonDir, lang) + ".json"
-			if FileExists(poFile) {
 
+			if FileExists(poFile) {
+				fmt.Println("Start Processing", poFile)
 				go func(poFile string, jsonFile string) {
 					dict, err := po.ParseFile(poFile)
 					if err != nil {
@@ -66,16 +69,22 @@ func main() {
 						os.Exit(1)
 					}
 
-					fmt.Println("Writing json file", jsonFile)
+					fmt.Println("Writing JSON", jsonFile)
 					jsonOutput := dict.String()
 					err = ioutil.WriteFile(jsonFile, []byte(jsonOutput), 0666)
 					if err != nil {
 						fmt.Println("Can not write json file", jsonFile)
 						os.Exit(1)
 					}
+					c <- true
 				}(poFile, jsonFile)
 			}
 		}
+		for routineCounter > 0 {
+			<-c
+			routineCounter--
+		}
+		fmt.Println("Done")
 	} else {
 		filename := os.Args[1]
 		if _, err := os.Stat(filename); err != nil {
